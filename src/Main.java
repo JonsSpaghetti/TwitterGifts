@@ -1,9 +1,7 @@
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,17 +9,29 @@ public class Main {
 
     public static void main(String[] args) throws TwitterException, IOException {
         ConfigurationBuilder config = new ConfigurationBuilder();
-        String consumerKey = "eGOMnm8oaH7aQrMDRGZhObz61";
+        File keys = new File("~/IdeaProjects/TwitterGifts/keys.txt");
+        FileReader reader = new FileReader(keys);
+
+        BufferedReader buffRead = new BufferedReader(reader);
+
+        String consumerKey = buffRead.readLine();
         config.setOAuthConsumerKey(consumerKey);
-        String consumerSecret = "McnlQl7rCM8y7VzJBJHopTgrtOU9NOT7Sr0jfGrwvYKjKhcPdI";
+        String consumerSecret = buffRead.readLine();
         config.setOAuthConsumerSecret(consumerSecret);
         config.setDebugEnabled(true);
-        String accessToken = "172445914-XekJoMAZDZznZdr0bC6geaul5P850YvifoqkUY19";
-        String accessSecret = "d1lHNfrmgmte75halTAUqvsMfjw7wsvBPJde4VGMF7fbr";
+        String accessToken = buffRead.readLine();
+        String accessSecret = buffRead.readLine();
         config.setOAuthAccessToken(accessToken);
         config.setOAuthAccessTokenSecret(accessSecret);
         File file = new File("/home/jtan/KathTweets/log.txt");
-        if(!file.exists()) file.createNewFile();
+        if(!file.exists()) {
+            try{
+                file.createNewFile();
+            }
+            catch(IOException ex){
+                System.out.println(ex.getMessage());
+            }
+        }
         FileWriter fileWrite = new FileWriter(file);
         final Twitter twitter = new TwitterFactory(config.build()).getInstance();
         Scanner scan = new Scanner(System.in);
